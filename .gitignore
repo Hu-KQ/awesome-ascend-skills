@@ -1,0 +1,38 @@
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Build artifacts
+*.skill
+*.zip
+build/
+dist/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+
+# Environment
+.env
+.venv
+env/
+venv/
+.ruff_cache/
