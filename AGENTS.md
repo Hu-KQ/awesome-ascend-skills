@@ -103,6 +103,7 @@ Keep SKILL.md lean:
 2. Create SKILL.md with proper frontmatter
 3. Add references/ and scripts/ as needed
 4. Update README.md skills table
+5. **Update `.claude-plugin/marketplace.json`**: Add the new skill to the `plugins` array with appropriate category
 
 ---
 

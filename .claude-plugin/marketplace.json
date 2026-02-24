@@ -2,41 +2,29 @@
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "awesome-ascend-skills",
   "version": "1.0.0",
-  "description": "A comprehensive knowledge base for Huawei Ascend NPU development, structured as distributed AI Agent Skills. Includes environment setup, CANN installation, NPU commands, testing, inference deployment (vLLM, MindIE, SGLang), training frameworks (MindSpeed, MindSpore, VERL), and custom operators (AscendC, Triton, TileLang, CATLass).",
+  "description": "A comprehensive knowledge base for Huawei Ascend NPU development, structured as distributed AI Agent Skills. Includes npu-smi device management, HCCL performance testing, and ATC model conversion.",
   "owner": {
     "name": "Ascend AI Coding",
     "email": "ascend-ai-coding@example.com"
   },
   "plugins": [
     {
-      "name": "ascend-npu",
-      "description": "Huawei Ascend NPU complete knowledge base entry point. Use as the starting point for all Ascend NPU related tasks including environment setup, CANN installation, testing, AI model development, inference deployment, training, and operator development.",
-      "source": "./ascend-npu",
+      "name": "npu-smi",
+      "description": "Huawei Ascend NPU npu-smi command reference. Use for device queries (health, temperature, power, memory, processes, ECC), configuration (thresholds, modes, fan), firmware upgrades (MCU, bootloader, VRD), virtualization (vNPU), and certificate management.",
+      "source": "./npu-smi",
+      "category": "operations"
+    },
+    {
+      "name": "hccl-test",
+      "description": "HCCL (Huawei Collective Communication Library) performance testing for Ascend NPU clusters. Use for testing distributed communication bandwidth, verifying HCCL functionality, and benchmarking collective operations like AllReduce, AllGather, AlltoAll.",
+      "source": "./hccl-test",
+      "category": "testing"
+    },
+    {
+      "name": "atc-model-converter",
+      "description": "Complete toolkit for Huawei Ascend NPU model conversion and inference. Convert ONNX models to .om format using ATC tool, run Python inference on OM models using ais_bench, compare precision between CPU ONNX and NPU OM outputs, and end-to-end YOLO inference with Ultralytics.",
+      "source": "./atc-model-converter",
       "category": "development"
-    },
-    {
-      "name": "ascend-basic-env",
-      "description": "Huawei Ascend NPU basic environment master skill. Use for environment setup, system preparation, and foundational configuration before development. Routes to specialized sub-skills for CANN installation, NPU commands reference, environment diagnostics, and testing.",
-      "source": "./ascend-basic-env",
-      "category": "development"
-    },
-    {
-      "name": "ascend-dev",
-      "description": "Huawei Ascend NPU development master skill. Use for AI model development, inference deployment, training, and operator development. Routes to framework-specific sub-skills.",
-      "source": "./ascend-dev",
-      "category": "development"
-    },
-    {
-      "name": "ascend-use-cases",
-      "description": "Ascend NPU real-world use cases and examples. Use for practical implementation examples and best practices for operators, inference, and training.",
-      "source": "./ascend-use-cases",
-      "category": "learning"
-    },
-    {
-      "name": "ascend-utils",
-      "description": "Shared utilities and tools for Ascend NPU skills. Contains common scripts, environment checks, and helper tools used across all Ascend skills.",
-      "source": "./ascend-utils",
-      "category": "productivity"
     }
   ]
 }
