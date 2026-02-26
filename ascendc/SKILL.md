@@ -1,3 +1,6 @@
+name: ascendc
+description: Guides the agent to develop AscendC transformer GMM-style custom ops (such as grouped_matmul_finalize_routing) and their CANN aclnn examples by following existing patterns under ops-transformer/gmm and attention/softmax_ops/examples. Use when adding or modifying these ops, their kernels, tiling/infershape logic, or CANN API examples.
+
 # AscendC Transformer Operator Development
 
 This skill guides the agent to develop/modify AscendC transformer-related operators according to existing patterns, including:
@@ -18,7 +21,7 @@ Apply this skill in the following scenarios:
 - Need to write CANN `aclnn_*` examples similar to `ffn/ffn/examples/test_aclnn_ffn.cpp`
 - Need to align, refactor, or bug-fix these operators while maintaining consistency with existing operator styles
 
-------
+---
 
 ## Overall Workflow
 
@@ -44,7 +47,7 @@ When users request to develop/modify such operators, follow these steps (order m
 
 Subsequent sections will detail what to do in each step and which details to pay attention to.
 
-------
+---
 
 ## Step 1: Reuse Existing Patterns
 
@@ -72,7 +75,7 @@ Subsequent sections will detail what to do in each step and which details to pay
   - Queue and UB buffer management patterns (`TQue`, `TPipe`)
   - AICore configuration and support for different chips (e.g., `ascend910b` / `ascend910_95`)
 
-------
+---
 
 ## Step 2: Define Operator Interface in op_host
 
@@ -135,8 +138,6 @@ Attr("activation").AttrType(OPTIONAL).Int({0}); // 0: GELU, 1: RELU, 2: FASTGELU
 Attr("inner_precise").AttrType(OPTIONAL).Int({0}); // 0: BF16, 1: FLOAT32
 ```
 
-
-
 #### GMM Operator (Refer to `grouped_matmul_def.cpp`)
 
 The GMM operator supports grouped matrix multiplication with configurable grouping and data types:
@@ -168,8 +169,6 @@ Attr("split_item").AttrType(OPTIONAL).ListInt({}); // Grouping information
 Attr("dtype").AttrType(OPTIONAL).Int({0}); // 0: FLOAT16, 1: BF16, 2: INT8
 Attr("transpose_weight").AttrType(OPTIONAL).Int({0}); // 0: No transpose, 1: Transpose
 ```
-
-
 
 #### MoE Operator (Refer to `moe_init_routing_def.cpp`)
 
@@ -207,8 +206,6 @@ Output("expandedExpertIdx")
 Attr("activeNum").AttrType(OPTIONAL).Int({0}); // Number of active experts
 ```
 
-
-
 ### Agent Key Points
 
 - When creating new operators:
@@ -221,7 +218,7 @@ Attr("activeNum").AttrType(OPTIONAL).Int({0}); // Number of active experts
 - If `aclnn` support is needed:
   - Follow the `"aclnnSupport.value", "support_aclnn"` configuration in reference operators
 
-------
+---
 
 ## Step 3: Implement AscendC Kernel in op_kernel
 
@@ -307,8 +304,6 @@ private:
 } // namespace FFN
 ```
 
-
-
 #### GMM Operator Implementation
 
 The GMM operator implements grouped matrix multiplication:
@@ -362,8 +357,6 @@ private:
 } // namespace GroupedMatmul
 ```
 
-
-
 #### MoE Operator Implementation
 
 The MoE operator implements Mixture-of-Experts routing logic:
@@ -410,8 +403,6 @@ private:
 } // namespace MoeInitRouting
 ```
 
-
-
 ### Typical Structure (Reference Only, Don't Memorize Rigidly)
 
 - Utility functions:
@@ -435,7 +426,7 @@ private:
   - Maintain:
     - Patterns for queue/UB allocation, `PipeBarrier`, `DataCopyPad`, `SetAtomicAdd` - do not change these unless there are clear bugs or requirements
 
-------
+---
 
 ## Step 4: Tiling / Infershape / Other Host Logic
 
@@ -454,7 +445,7 @@ Although this skill example doesn't expand all files, the agent should follow th
      - Graph attributes/shapes correctly map to `tiling->...` fields accessed in kernel
      - Deterministic switches, workspace size, coreNum/parallNum calculation logic maintain consistent style
 
-------
+---
 
 ## Step 5: CANN aclnn Examples (examples)
 
@@ -499,7 +490,7 @@ Refer to `test_aclnn_softmax_ops.cpp`, the pattern is as follows:
     - Error checking macros (`CHECK_RET`) and logging output macros
     - Paired allocation/release of all `acl*` resources
 
-------
+---
 
 ## Step 6: Testing and Verification (If Python Frontend Exists)
 
@@ -515,7 +506,7 @@ If Python tests exist in the project (e.g., `op-plugin/test/test_custom_ops/test
      - Shape and dtype are correct
      - Numerical errors are within reasonable range (especially in quantization/dequantization scenarios)
 
-------
+---
 
 ## Additional Constraints for the Agent
 
@@ -527,7 +518,7 @@ If Python tests exist in the project (e.g., `op-plugin/test/test_custom_ops/test
 - For examples and tests:
   - Better to have small, clear examples (single shape, easy to manually verify) rather than complex scenarios from the beginning
 
-------
+---
 
 ## Brief Usage Example
 
@@ -538,4 +529,3 @@ If Python tests exist in the project (e.g., `op-plugin/test/test_custom_ops/test
   3. Copy the core class from `op_kernel/grouped_matmul_finalize_routing.h`, adjust GM tensors and dequantization flow according to new requirements
   4. Refer to related tiling/infershape files to ensure correct parameter mapping from Graph to kernel
   5. Refer to `test_aclnn_softmax_ops.cpp` to write a new `aclnn` example, and supplement unit tests if needed
-
