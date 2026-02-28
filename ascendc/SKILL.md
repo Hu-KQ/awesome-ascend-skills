@@ -1,6 +1,6 @@
 ---
 name: ascendc
-description: Guides the agent to develop AscendC transformer GMM-style custom ops (such as grouped_matmul_finalize_routing) and their CANN aclnn examples by following existing patterns under ops-transformer/gmm and attention/softmax_ops/examples. Use when adding or modifying these ops, their kernels, tiling/infershape logic, or CANN API examples.
+description: Guides the agent to develop AscendC transformer GMM-style custom ops (such as grouped_matmul_finalize_routing) and their CANN aclnn examples by following existing patterns under ops-transformer/gmm and attention/example_op/examples. Use when adding or modifying these ops, their kernels, tiling/infershape logic, or CANN API examples.
 keywords:
     - ascend
     - ascendc
@@ -74,11 +74,13 @@ Subsequent sections will detail what to do in each step and which details to pay
   - Graph definition: `ops-transformer/moe/moe_init_routing/op_host/moe_init_routing_def.cpp`
   - CANN API example: `ops-transformer/moe/moe_init_routing/examples/test_aclnn_moe_init_routing.cpp`
 - General CANN API Example Reference:
-  - `ops-transformer/attention/softmax_ops/examples/test_aclnn_softmax_ops.cpp`
+  - `ops-transformer/examples/add_example/examples/test_aclnn_add_example.cpp`
 - Type / Format Enum Reference (CANN):
+  - 详见本 skill 下的 **references/type_format_reference.md**。
   - Data types: `enum DataType` in `graph/types.h` (e.g. lines 80–123) under CANN install path, such as
     `/usr/local/Ascend/cann-8.5.0-beta.1/aarch64-linux/include/graph/types.h`
   - Tensor formats: `enum Format` in the same `graph/types.h` (e.g. lines 189–247)
+  - **op_host 定义约定**：每个输入/输出的 `.DataType({...})`、`.Format({...})`、`.UnknownShapeFormat({...})` 三个列表的**元素个数必须相同**（见 references/type_format_reference.md）。
 
 ### Behavioral Guidelines
 
@@ -529,7 +531,7 @@ Although this skill example doesn't expand all files, the agent should follow th
 
 ## Step 5: CANN aclnn Examples (examples)
 
-Refer to `test_aclnn_softmax_ops.cpp`, the pattern is as follows:
+Refer to `test_aclnn_example_op.cpp`, the pattern is as follows:
 
 1. **Common Utility Functions**
    - `GetShapeSize`: calculates product of shape dimensions
@@ -562,7 +564,7 @@ Refer to `test_aclnn_softmax_ops.cpp`, the pattern is as follows:
 ### Agent Key Points
 
 - When creating new `aclnn_*` examples:
-  - **Completely copy the structure of `test_aclnn_softmax_ops.cpp`**, then modify:
+  - **Completely copy the structure of `test_aclnn_example_op.cpp`**, then modify:
     - Header includes (`aclnnop/aclnn_xxx.h`)
     - Number of tensors, shapes, dtypes, and fill data
     - Function names and parameter lists for `aclnnXxxGetWorkspaceSize` / `aclnnXxx`
@@ -608,7 +610,7 @@ If Python tests exist in the project (e.g., `op-plugin/test/test_custom_ops/test
   2. Copy `*_def.cpp`, rename and modify interface, adjust inputs/attributes
   3. Copy the core class from `op_kernel/grouped_matmul_finalize_routing.h`, adjust GM tensors and dequantization flow according to new requirements
   4. Refer to related tiling/infershape files to ensure correct parameter mapping from Graph to kernel
-  5. Refer to `test_aclnn_softmax_ops.cpp` to write a new `aclnn` example, and supplement unit tests if needed
+  5. Refer to `test_aclnn_example_op.cpp` to write a new `aclnn` example, and supplement unit tests if needed
 
 ---
 
