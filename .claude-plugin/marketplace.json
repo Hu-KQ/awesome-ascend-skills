@@ -75,6 +75,12 @@
       "category": "development"
     },
     {
+      "name": "vllm-bench-serve",
+      "description": "vLLM 推理服务在线性能压测与自动寻优。支持单次/批量/自动寻优模式，结果聚合对比，在 TTFT/TPOT/P99/成功率等 SLO 约束下搜索最优并发/吞吐。",
+      "source": "./vllm-bench-serve",
+      "category": "testing"
+    },
+    {
       "name": "diffusers-ascend-skills",
       "description": "Diffusers 昇腾 NPU 技能集，包括环境配置、权重准备、Pipeline 推理等。当用户需要在昇腾 NPU 上运行 Diffusers 推理时使用。",
       "source": "./",
