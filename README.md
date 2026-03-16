@@ -92,6 +92,7 @@ cp -r awesome-ascend-skills/npu-smi your-project/.agents/skills/
 | [ascend-opplugin](ascend-opplugin/SKILL.md) | 开发 | op-plugin 环境安装与 torch_npu 自定义算子接入：无 workspace / workspace+tiling 两种模式，从内核实现到 host 注册、构建与测试 |
 | [diffusers-ascend-weight-prep](diffusers-ascend/diffusers-ascend-weight-prep/SKILL.md) | 开发 | Diffusers 权重准备：HuggingFace/ModelScope 模型下载、基于 config.json 生成假权重用于验证 |
 | [diffusers-ascend-pipeline](diffusers-ascend/diffusers-ascend-pipeline/SKILL.md) | 开发 | Diffusers Pipeline 推理：环境预检、通用推理（图像/视频）、内存优化、LoRA 集成 |
+| [vllm-ascend-server](vllm-ascend-server/SKILL.md) | 开发 | vLLM 推理服务部署：自动模型发现、量化检测、张量并行、graph/eager 模式、健康检查 |
 
 ---
 

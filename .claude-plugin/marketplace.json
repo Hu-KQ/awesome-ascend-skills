@@ -75,6 +75,12 @@
       "category": "development"
     },
     {
+      "name": "vllm-ascend-server",
+      "description": "在昇腾 NPU 上部署 vLLM 推理服务。支持本地/远程部署、裸金属/容器/Docker 镜像，自动模型发现、量化检测、张量并行配置、graph/eager 模式选择和服务健康检查。",
+      "source": "./vllm-ascend-server",
+      "category": "development"
+    },
+    {
       "name": "diffusers-ascend-skills",
       "description": "Diffusers 昇腾 NPU 技能集，包括环境配置、权重准备、Pipeline 推理等。当用户需要在昇腾 NPU 上运行 Diffusers 推理时使用。",
       "source": "./",
