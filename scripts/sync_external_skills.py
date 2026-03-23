@@ -623,16 +623,16 @@ def update_marketplace(
     synced_skills: List[Tuple[Skill, str]],
     marketplace_path: str = ".claude-plugin/marketplace.json",
 ) -> None:
-    """Update marketplace.json with external skills entries.
+    """Update marketplace.json with external skills entries grouped by source.
 
     Args:
         synced_skills: List of tuples (Skill, commit_sha) that were successfully synced
         marketplace_path: Path to marketplace.json file (default: .claude-plugin/marketplace.json)
 
-    Reads existing marketplace.json, adds/updates external skill entries, and writes back.
-    External skills are marked with `external: true` and include source-url.
+    Groups external skills by source and creates one entry per source with skills array.
     """
     import json
+    from collections import defaultdict
 
     marketplace_file = Path(marketplace_path)
 
@@ -653,35 +653,59 @@ def update_marketplace(
         }
 
     plugins = marketplace.get("plugins", [])
-    existing_names = {plugin["name"] for plugin in plugins}
 
+    # Group skills by source
+    skills_by_source: Dict[str, List[Tuple[Skill, str]]] = defaultdict(list)
     for skill, commit_sha in synced_skills:
-        skill_name = skill.name
-        source_name = skill.source.name
-        source_url = skill.source.url
+        skills_by_source[skill.source.name].append((skill, commit_sha))
 
-        if skill_name in existing_names:
-            plugins = [p for p in plugins if p["name"] != skill_name]
-            existing_names.remove(skill_name)
+    # Remove existing external entries for these sources
+    external_group_names = {
+        f"external-{name}-skills" for name in skills_by_source.keys()
+    }
+    plugins = [p for p in plugins if p.get("name") not in external_group_names]
 
-        external_entry = {
-            "name": skill_name,
-            "description": f"External skill from {source_name}. Synced from {source_url} (commit: {commit_sha})",
-            "source": f"./external/{source_name}/{skill_name}",
-            "category": "external",
+    # Create grouped entries for each source
+    for source_name, skills_list in skills_by_source.items():
+        source = skills_list[0][0].source
+        skill_paths = []
+        descriptions = []
+
+        for skill, _ in skills_list:
+            skill_paths.append(f"./external/{source_name}/{skill.name}")
+            parsed = parse_skill_md(skill.path)
+            desc = parsed.get("description", "")
+            if desc:
+                descriptions.append(f"- {skill.name}: {desc[:100]}")
+
+        description_text = (
+            f"从 {source_name} 同步的 Ascend 技能集，包含 {len(skills_list)} 个技能"
+        )
+        if descriptions:
+            description_text += "：\n" + "\n".join(descriptions[:3])
+            if len(descriptions) > 3:
+                description_text += f"\n- ... 等 {len(descriptions) - 3} 个技能"
+
+        group_entry = {
+            "name": f"external-{source_name}-skills",
+            "description": description_text,
+            "source": "./",
+            "strict": False,
             "external": True,
-            "source-url": source_url,
-            "source-branch": skill.source.branch,
+            "source-url": source.url,
+            "source-branch": source.branch,
+            "skills": skill_paths,
         }
 
-        plugins.append(external_entry)
-        existing_names.add(skill_name)
+        plugins.append(group_entry)
 
     marketplace["plugins"] = plugins
     with marketplace_file.open("w", encoding="utf-8") as f:
         json.dump(marketplace, f, indent=2, ensure_ascii=False)
 
-    print(f"✅ Updated marketplace.json with {len(synced_skills)} external skills")
+    print(
+        f"✅ Updated marketplace.json with {len(skills_by_source)} external skill groups ({len(synced_skills)} skills total)"
+    )
 
 
 def main():
