@@ -100,6 +100,7 @@ cp -r awesome-ascend-skills/npu-smi your-project/.agents/skills/
 | [training-mfu-calculator](training-mfu-calculator/SKILL.md) | 测试 | MFU 计算工具：Dense/MoE 模型 FLOPs 计算、Ascend NPU 硬件峰值参考、性能分析报告 |
 | [github-issue-summary](github-issue-summary/SKILL.md) | 开发 | GitHub Issue 分析：从已关闭 issue 生成故障排查案例、根因分析、经验总结 |
 | [profiling-analysis](profiling-analysis/profiling-main/SKILL.md) | 分析 | Profiling 性能分析技能集：分析 step_trace_time.csv 识别下发、通信、计算瓶颈 |
+| [training-profiler](training-profiler/SKILL.md) | 分析 | 自动化完成昇腾 NPU 上 MindSpeed-LLM 训练的 Profiling 数据采集 |
 
 ## 外部 Skills (External Skills)
 
