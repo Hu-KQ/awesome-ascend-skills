@@ -111,6 +111,12 @@
       "category": "development"
     },
     {
+      "name": "github-issue-rca",
+      "description": "GitHub Issue root cause analysis skill. Analyze specified GitHub issues to identify possible root causes by examining issue content, code repository, and related resources. Use when user asks to analyze issue root cause, investigate issue, RCA analysis, or troubleshoot GitHub issues. Provides investigation directions with probability estimates and explicitly states when root cause cannot be determined.",
+      "source": "./github-issue-rca",
+      "category": "development"
+    },
+    {
       "name": "profiling-analysis",
       "description": "Profiling skill set for Huawei Ascend NPU performance analysis. Analyzes step_trace_time.csv files to identify hostbound, computing, and communication bottlenecks. Use when performing performance analysis and optimization on Ascend NPU.",
       "source": "./",
